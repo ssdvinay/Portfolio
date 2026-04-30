@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Vinay Kumar — UI/UX Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0B0D12;
+  --bg2:#0F111A;
+  --card:#131722;
+  --card2:#161B27;
+  --ink:#F8FAFC;
+  --mid:#94A3B8;
+  --dim:#475569;
+  --border:#1E293B;
+  --border2:#243044;
+  --blue:#3B82F6;
+  --indigo:#6366F1;
+  --cyan:#06B6D4;
+  --blue-glow:rgba(59,130,246,0.15);
+  --indigo-glow:rgba(99,102,241,0.12);
+  --grad:linear-gradient(135deg,#3B82F6,#6366F1);
+  --grad2:linear-gradient(135deg,#6366F1,#06B6D4);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;cursor:none}
+a{text-decoration:none;color:inherit}
+button{font-family:'Poppins',sans-serif;cursor:none}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;z-index:9000;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;
+  transition:opacity .5s ease,visibility .5s ease;
+}
+#loader.gone{opacity:0;visibility:hidden}
+.loader-name{
+  font-size:1.4rem;font-weight:800;letter-spacing:-.03em;
+  background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  opacity:0;animation:lname .5s .2s ease forwards;
+}
+@keyframes lname{to{opacity:1}}
+.loader-bar{width:160px;height:2px;background:var(--border);border-radius:100px;overflow:hidden}
+.loader-fill{height:100%;background:var(--grad);border-radius:100px;animation:lfill 1.2s ease forwards}
+@keyframes lfill{0%{width:0}100%{width:100%}}
+.loader-pct{font-size:.65rem;font-weight:500;color:var(--dim);letter-spacing:.1em;opacity:0;animation:lname .4s .3s ease forwards}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--blue);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s}
+#curl{position:fixed;width:34px;height:34px;border:1px solid rgba(59,130,246,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s,border-color .2s;opacity:.5}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:58px;display:flex;justify-content:space-between;align-items:center;
+  padding:0 3.5rem;
+  background:rgba(11,13,18,.8);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  transform:translateY(-100%);animation:navIn .6s .3s ease forwards;
+}
+@keyframes navIn{to{transform:translateY(0)}}
+.logo{font-size:1rem;font-weight:800;letter-spacing:-.02em}
+.logo em{font-style:italic;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-r{display:flex;align-items:center;gap:2rem}
+.nav-r a{font-size:.7rem;font-weight:500;color:var(--mid);text-transform:uppercase;letter-spacing:.08em;transition:color .2s;position:relative}
+.nav-r a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--blue);transition:width .3s}
+.nav-r a:hover{color:var(--ink)}
+.nav-r a:hover::after{width:100%}
+.nav-btn{padding:7px 16px;background:transparent;color:var(--ink);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--border2);border-radius:6px;transition:background .2s,border-color .2s,box-shadow .2s}
+.nav-btn:hover{background:var(--blue-glow);border-color:var(--blue);box-shadow:0 0 16px rgba(59,130,246,.2)}
+
+/* ── PAGES ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ═══════════════════════════════
+   HERO
+═══════════════════════════════ */
+.hero{
+  padding-top:58px;min-height:100vh;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+/* animated gradient mesh BG */
+.hero-mesh{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+}
+.mesh-orb{
+  position:absolute;border-radius:50%;filter:blur(80px);
+  animation:orbFloat 8s ease-in-out infinite;
+}
+.orb1{width:500px;height:500px;top:-100px;right:-50px;background:rgba(99,102,241,.08);animation-delay:0s}
+.orb2{width:400px;height:400px;bottom:-50px;left:10%;background:rgba(59,130,246,.06);animation-delay:-3s}
+.orb3{width:300px;height:300px;top:40%;right:20%;background:rgba(6,182,212,.04);animation-delay:-5s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-30px)}66%{transform:translate(-15px,20px)}}
+
+/* grid dot pattern */
+.hero-dots{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(59,130,246,.12) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:radial-gradient(ellipse at 60% 40%,black 0%,transparent 70%);
+}
+
+.hero-main{
+  flex:1;display:grid;grid-template-columns:1fr 380px;
+  gap:3rem;align-items:center;
+  padding:3rem 3.5rem;
+  position:relative;z-index:1;
+}
+.hero-left{}
+
+/* stagger animations */
+.hero-left>*{opacity:0;transform:translateY(20px)}
+.page.active .ha1{animation:fadeUp .7s .8s ease forwards}
+.page.active .ha2{animation:fadeUp .7s 1s ease forwards}
+.page.active .ha3{animation:fadeUp .7s 1.15s ease forwards}
+.page.active .ha4{animation:fadeUp .7s 1.3s ease forwards}
+.page.active .ha5{animation:fadeUp .7s 1.45s ease forwards}
+.page.active .ha6{animation:fadeUp .7s 1.6s ease forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+.avail{display:inline-flex;align-items:center;gap:8px;font-size:.65rem;font-weight:500;color:#34d399;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);padding:5px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.08em}
+.avail-dot{width:6px;height:6px;border-radius:50%;background:#34d399;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.4)}60%{box-shadow:0 0 0 5px transparent}}
+
+.hero-name{font-size:clamp(3.5rem,6.5vw,6rem);font-weight:900;line-height:.88;letter-spacing:-.05em;margin-top:.5rem}
+.hero-name .grad-text{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block}
+.hero-name .stroke-text{-webkit-text-stroke:1.5px rgba(248,250,252,.18);color:transparent;display:block}
+
+.hero-desc{font-size:.95rem;line-height:1.8;color:var(--mid);font-weight:300;max-width:520px;margin-top:1.2rem}
+.hero-desc strong{color:var(--ink);font-weight:600}
+
+/* contact chips */
+.hero-contacts{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.6rem;padding-top:1.6rem;border-top:1px solid var(--border)}
+.hc{display:inline-flex;align-items:center;gap:6px;font-size:.66rem;font-weight:400;color:var(--mid);transition:color .2s}
+.hc svg{width:11px;height:11px;stroke:var(--blue);flex-shrink:0}
+.hc:hover{color:var(--ink)}
+
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.8rem}
+.btn-grd{padding:11px 22px;background:var(--grad);color:#fff;font-size:.76rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:8px;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(59,130,246,.35)}
+.btn-grd:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,130,246,.5)}
+.btn-ghost{padding:11px 22px;background:transparent;color:var(--ink);font-size:.76rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--border2);border-radius:8px;transition:border-color .2s,background .2s}
+.btn-ghost:hover{border-color:var(--blue);background:var(--blue-glow)}
+.btn-dl{padding:11px 18px;background:var(--card);color:var(--mid);font-size:.76rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--border);border-radius:8px;display:inline-flex;align-items:center;gap:7px;transition:all .2s}
+.btn-dl svg{width:12px;height:12px;stroke:currentColor}
+.btn-dl:hover{border-color:var(--blue);color:var(--ink);background:var(--blue-glow)}
+
+/* achievements */
+.ach-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:2rem}
+.ach{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:1.1rem 1rem;position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+}
+.ach::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);opacity:0;transition:opacity .3s}
+.ach:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(59,130,246,.12);border-color:var(--blue)}
+.ach:hover::before{opacity:1}
+.ach-n{font-size:1.6rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:.25rem}
+.ach-t{font-size:.68rem;font-weight:600;color:var(--ink);margin-bottom:.12rem}
+.ach-d{font-size:.6rem;color:var(--dim);line-height:1.45}
+
+/* hero right — floating stat cards */
+.hero-right{
+  display:flex;flex-direction:column;gap:.7rem;
+  opacity:0;animation:slideLeft .8s 1.2s ease forwards;
+}
+@keyframes slideLeft{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.2rem 1.5rem;
+  position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+}
+.stat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,.04),transparent);pointer-events:none}
+.stat-card:hover{transform:translateX(-5px);box-shadow:0 8px 32px rgba(59,130,246,.12);border-color:rgba(59,130,246,.3)}
+.sc-l{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);margin-bottom:.25rem}
+.sc-v{font-size:1.4rem;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-.03em}
+.sc-s{font-size:.65rem;color:var(--mid);margin-top:3px}
+
+/* ── MARQUEE ── */
+.mq{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:.75rem 0}
+.mq-t{display:flex;animation:mq 25s linear infinite;white-space:nowrap}
+.mq-i{display:inline-flex;align-items:center;gap:1.2rem;padding:0 1.5rem;font-size:.75rem;font-weight:400;color:var(--dim);letter-spacing:.04em}
+.mq-dot{width:3px;height:3px;border-radius:50%;background:var(--blue);flex-shrink:0}
+@keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── SECTIONS ── */
+section{padding:5.5rem 3.5rem}
+.ov{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--blue);margin-bottom:.9rem;display:flex;align-items:center;gap:8px}
+.ov::before{content:'';width:16px;height:1.5px;background:var(--blue)}
+.sh{font-size:clamp(2.2rem,4vw,3.3rem);font-weight:800;line-height:.92;letter-spacing:-.04em;margin-bottom:3rem}
+.sh em{font-style:italic;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── ABOUT ── */
+.about-bg{background:var(--bg2);border-top:1px solid var(--border)}
+.about-g{display:grid;grid-template-columns:1.1fr .9fr;gap:5rem;align-items:start}
+.abt-p{font-size:.92rem;line-height:1.85;color:var(--mid);font-weight:300;margin-bottom:1.1rem}
+.abt-p strong{color:var(--ink);font-weight:600}
+.exp-list{margin-top:2rem;display:flex;flex-direction:column;gap:2px}
+.exp-row{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:1rem 1.3rem;display:grid;grid-template-columns:140px 1fr;gap:1rem;
+  transition:border-color .2s,transform .2s,box-shadow .2s;
+}
+.exp-row:hover{border-color:rgba(59,130,246,.3);transform:translateX(4px);box-shadow:0 4px 20px rgba(59,130,246,.08)}
+.exp-date{font-size:.6rem;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.exp-t{font-size:.86rem;font-weight:700;color:var(--ink)}
+.exp-co{font-size:.74rem;font-weight:500;color:var(--blue);margin-top:2px}
+.exp-d{font-size:.7rem;color:var(--mid);margin-top:3px;line-height:1.5}
+.info-stack{display:flex;flex-direction:column;gap:2px}
+.ic{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem 1.3rem;transition:border-color .2s,box-shadow .2s}
+.ic:hover{border-color:rgba(59,130,246,.3);box-shadow:0 4px 16px rgba(59,130,246,.08)}
+.ic-l{font-size:.56rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);margin-bottom:.3rem}
+.ic-v{font-size:.86rem;font-weight:600;color:var(--ink)}
+.ic-s{font-size:.7rem;color:var(--mid);margin-top:2px}
+
+/* ── WORK ── */
+.work-bg{background:var(--bg);border-top:1px solid var(--border)}
+.cs-g{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.csc{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:2.8rem;position:relative;overflow:hidden;cursor:none;
+  transition:transform .4s ease,box-shadow .4s ease,border-color .4s ease;
+  will-change:transform;
+}
+.csc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.csc:hover{border-color:rgba(59,130,246,.3);box-shadow:0 20px 60px rgba(59,130,246,.12),0 4px 16px rgba(0,0,0,.3)}
+.csc:hover::before{transform:scaleX(1)}
+.cs-idx{font-size:.58rem;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.8rem;display:flex;justify-content:space-between;align-items:center}
+.cs-badge{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);padding:3px 9px;border-radius:4px}
+.cs-title{font-size:1.4rem;font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:.8rem;color:var(--ink)}
+.cs-desc{font-size:.83rem;line-height:1.7;color:var(--mid);font-weight:300;margin-bottom:1.8rem}
+.cs-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:2rem}
+.cc{font-size:.58rem;font-weight:500;padding:3px 8px;border:1px solid var(--border2);border-radius:4px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
+.cs-go{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);border:none;background:none;padding:0;transition:gap .25s,color .2s;cursor:none}
+.cs-go:hover{gap:13px;color:var(--cyan)}
+.cs-go svg{width:12px;height:12px;stroke:currentColor}
+
+/* other projects */
+.other-bg{background:var(--bg2);border-top:1px solid var(--border)}
+.proj-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);margin-top:2rem}
+.prow{display:grid;grid-template-columns:44px 1fr 150px 180px;gap:2rem;align-items:center;padding:1.4rem 1.8rem;border-bottom:1px solid var(--border);transition:background .2s;cursor:none;position:relative}
+.prow:last-child{border-bottom:none}
+.prow:hover{background:rgba(59,130,246,.04)}
+.prow::after{content:'↗';position:absolute;right:1.8rem;font-size:.85rem;color:var(--dim);opacity:0;transition:opacity .2s,right .2s}
+.prow:hover::after{opacity:1;right:1.4rem}
+.p-n{font-size:.75rem;font-weight:700;color:var(--dim)}
+.p-t{font-size:.88rem;font-weight:700;margin-bottom:3px;color:var(--ink)}
+.p-d{font-size:.73rem;color:var(--mid);line-height:1.45}
+.p-badge{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);padding:3px 9px;border-radius:4px;width:fit-content}
+.p-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.ptag{font-size:.56rem;padding:2px 7px;border:1px solid var(--border2);border-radius:3px;color:var(--dim)}
+
+/* ── SKILLS ── */
+.sk-bg{background:var(--bg);border-top:1px solid var(--border)}
+.sk-g{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.skcell{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.8rem 1.5rem;
+  position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+}
+.skcell::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.skcell:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(59,130,246,.12);border-color:rgba(59,130,246,.25)}
+.skcell:hover::before{transform:scaleX(1)}
+.sk-n{font-size:.56rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);margin-bottom:.9rem}
+.sk-t{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+.sk-d{font-size:.72rem;color:var(--mid);line-height:1.65}
+
+/* ── CONTACT ── */
+.ctc-bg{background:var(--bg2);border-top:1px solid var(--border);position:relative;overflow:hidden}
+.ctc-glow{position:absolute;top:-200px;left:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,.08),transparent 70%);pointer-events:none}
+.ctc-glow2{position:absolute;bottom:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%);pointer-events:none}
+.ctc-inner{position:relative;z-index:1;padding:6rem 3.5rem;max-width:900px}
+.ctc-ov{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--blue);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.ctc-ov::before{content:'';width:16px;height:1.5px;background:var(--blue)}
+.ctc-h{font-size:clamp(2.8rem,6.5vw,5.5rem);font-weight:900;line-height:.88;letter-spacing:-.05em;color:var(--ink);margin-bottom:.3rem}
+.ctc-h em{font-style:italic;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ctc-sub{font-size:.9rem;color:var(--mid);line-height:1.78;max-width:460px;margin:2rem 0;font-weight:300}
+.cl-row{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:2rem}
+.cl{display:flex;align-items:center;gap:7px;padding:11px 20px;border-radius:8px;font-size:.73rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border:none;cursor:none;transition:transform .2s,box-shadow .2s}
+.cl:hover{transform:translateY(-2px)}
+.cl.email{background:var(--grad);color:#fff;box-shadow:0 4px 20px rgba(59,130,246,.4)}
+.cl.email:hover{box-shadow:0 8px 28px rgba(59,130,246,.55)}
+.cl.soc{background:var(--card);color:var(--mid);border:1px solid var(--border2);transition:border-color .2s,color .2s,background .2s}
+.cl.soc:hover{border-color:rgba(59,130,246,.4);color:var(--ink);background:var(--blue-glow)}
+.cl svg{width:12px;height:12px;stroke:currentColor}
+.ctc-di-row{display:flex;gap:2rem;flex-wrap:wrap}
+.ctc-di{display:flex;align-items:center;gap:7px;font-size:.63rem;color:var(--dim)}
+.ctc-di svg{width:11px;height:11px;stroke:var(--dim)}
+footer{padding:1.4rem 3.5rem;background:var(--bg);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+footer span{font-size:.68rem;color:var(--dim)}
+footer b{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+
+/* ══════════════════════════════
+   CASE STUDY PAGES
+══════════════════════════════ */
+.csp{padding-top:58px}
+.csh{padding:3.5rem 3.5rem 3rem;background:var(--bg);border-bottom:1px solid var(--border);position:relative}
+.csh::after{content:'';position:absolute;bottom:0;left:0;width:240px;height:1px;background:var(--grad)}
+.back-b{display:inline-flex;align-items:center;gap:7px;font-size:.63rem;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:.1em;border:none;background:none;padding:0;margin-bottom:2.5rem;transition:color .2s;cursor:none}
+.back-b svg{width:13px;height:13px;stroke:currentColor}
+.back-b:hover{color:var(--blue)}
+.csh-ov{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--blue);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.csh-ov::before{content:'';width:16px;height:1.5px;background:var(--blue)}
+.csh-h{font-size:clamp(2.8rem,5.5vw,5rem);font-weight:900;line-height:.9;letter-spacing:-.04em;color:var(--ink);margin-bottom:1.2rem}
+.csh-h em{font-style:italic;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.csh-sub{font-size:.96rem;line-height:1.78;color:var(--mid);max-width:620px;margin-bottom:2.5rem;font-weight:300}
+.csh-meta{display:flex;flex-wrap:wrap;gap:0;padding-top:1.8rem;border-top:1px solid var(--border)}
+.cmeta{padding:.65rem 2rem .65rem 0;margin-right:2rem;border-right:1px solid var(--border)}
+.cmeta:last-child{border-right:none}
+.cm-l{font-size:.55rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:.25rem}
+.cm-v{font-size:.83rem;font-weight:600;color:var(--ink)}
+
+.cs-body{display:grid;grid-template-columns:1fr 240px;gap:4rem;padding:4rem 3.5rem;align-items:start}
+.sb{position:sticky;top:78px}
+.sb-h{font-size:.55rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:.8rem}
+.sb-items{display:flex;flex-direction:column;gap:1px}
+.sb-btn{font-size:.75rem;font-weight:400;color:var(--mid);padding:6px 12px;border-left:2px solid var(--border);background:none;border-top:0;border-right:0;border-bottom:0;text-align:left;transition:color .2s,border-color .2s;cursor:none;font-family:'Poppins',sans-serif}
+.sb-btn:hover{color:var(--blue);border-left-color:var(--blue)}
+.sb-tools{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.tps{display:flex;flex-wrap:wrap;gap:4px;margin-top:.6rem}
+.tp{font-size:.6rem;font-weight:500;padding:3px 8px;border:1px solid var(--border2);border-radius:4px;color:var(--mid)}
+
+.cssec{margin-bottom:4rem}
+.css-l{font-size:.56rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:var(--blue);margin-bottom:.7rem;display:flex;align-items:center;gap:7px}
+.css-l::after{content:'';flex:1;height:1px;background:var(--border)}
+.css-h{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;color:var(--ink)}
+.css-p{font-size:.9rem;line-height:1.85;color:var(--mid);font-weight:300;margin-bottom:.9rem}
+.css-p strong{color:var(--ink);font-weight:600}
+
+.pain-g{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-radius:8px;overflow:hidden;margin:1.3rem 0}
+.pain-c{background:var(--card);padding:1rem 1.3rem;display:flex;gap:.7rem;align-items:flex-start;transition:background .2s}
+.pain-c:hover{background:var(--card2)}
+.pain-c::before{content:'↗';color:var(--blue);font-size:.7rem;flex-shrink:0;margin-top:1px;font-weight:700}
+.pain-c p{font-size:.77rem;color:var(--mid);line-height:1.5}
+
+.mod-stack{display:flex;flex-direction:column;gap:2px;background:var(--border);border-radius:8px;overflow:hidden;margin:1.3rem 0}
+.mrow{background:var(--card);padding:1.1rem 1.3rem;display:grid;grid-template-columns:32px 1fr;gap:.9rem;align-items:start;transition:background .2s}
+.mrow:hover{background:var(--card2)}
+.midx{font-size:.7rem;font-weight:700;color:var(--blue)}
+.mt{font-size:.86rem;font-weight:700;color:var(--ink);margin-bottom:.2rem}
+.md{font-size:.75rem;color:var(--mid);line-height:1.55}
+
+.kpi-g{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.3rem 0}
+.kpi-c{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:transform .25s,box-shadow .25s,border-color .25s}
+.kpi-c:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(59,130,246,.12);border-color:rgba(59,130,246,.25)}
+.kv{font-size:2.5rem;font-weight:900;line-height:1;letter-spacing:-.04em;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.kd{font-size:.63rem;font-weight:500;color:var(--mid);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem}
+
+.tag-c{display:flex;flex-wrap:wrap;gap:6px;margin:1.1rem 0}
+.tg{font-size:.63rem;font-weight:500;padding:4px 10px;border:1px solid var(--border2);border-radius:4px;color:var(--mid);text-transform:uppercase;letter-spacing:.04em;transition:all .2s}
+.tg.hi{border-color:rgba(59,130,246,.3);color:var(--blue);background:rgba(59,130,246,.08)}
+.tg:hover{border-color:rgba(59,130,246,.4);color:var(--ink)}
+
+.cs-nxt{padding:2.5rem 3.5rem;background:var(--bg2);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.cn-l{font-size:.56rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:.4rem}
+.cn-t{font-size:1.55rem;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.cn-b{display:inline-flex;align-items:center;gap:9px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);border:none;background:none;padding:0;cursor:none;transition:gap .25s,color .2s}
+.cn-b:hover{gap:15px;color:var(--cyan)}
+.cn-b svg{stroke:currentColor;width:14px;height:14px}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-name">Vinay Kumar</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-pct">Loading Portfolio...</div>
+</div>
+
+<div id="cur"></div>
+<div id="curl"></div>
+
+<nav>
+  <div class="logo">Vinay<em>.</em>Kumar</div>
+  <div class="nav-r">
+    <a href="#" onclick="goH()">Home</a>
+    <a href="#" onclick="goH('about')">About</a>
+    <a href="#" onclick="goH('work')">Work</a>
+    <a href="#" onclick="goH('skills')">Skills</a>
+    <button class="nav-btn" onclick="goH('contact')">Hire Me</button>
+  </div>
+</nav>
+
+<!-- ════════════ HOME ════════════ -->
+<div id="home" class="page active">
+
+<section class="hero" style="padding:0">
+  <div class="hero-mesh">
+    <div class="mesh-orb orb1"></div>
+    <div class="mesh-orb orb2"></div>
+    <div class="mesh-orb orb3"></div>
+  </div>
+  <div class="hero-dots"></div>
+
+  <div class="hero-main">
+    <div class="hero-left">
+      <div class="avail ha1"><div class="avail-dot"></div>Available for Work</div>
+
+      <h1 class="hero-name ha2">
+        <span class="grad-text">Vinay</span>
+        <span class="stroke-text">Kumar</span>
+      </h1>
+
+      <p class="hero-desc ha3">
+        UI/UX Designer with <strong>2+ years</strong> crafting <strong>sharp, purposeful digital experiences</strong> — enterprise SaaS, AI platforms & mobile apps — backed by a <strong>CS degree from SZABIST.</strong>
+      </p>
+
+      <div class="hero-contacts ha4">
+        <a class="hc" href="mailto:vinayghai50@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>vinayghai50@gmail.com</a>
+        <a class="hc" href="tel:+923363149322"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+92 336 314 9322</a>
+        <a class="hc" href="https://www.linkedin.com/in/vinay-kumar-2b430323b/" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>
+        <a class="hc" href="https://dribbble.com/vinigi" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>Dribbble</a>
+      </div>
+
+      <div class="hero-btns ha5">
+        <button class="btn-grd" onclick="goH('work')">View Work</button>
+        <button class="btn-ghost" onclick="goH('contact')">Contact Me</button>
+        <a class="btn-dl" href="VinayKumar_Resume.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>Resume
+        </a>
+      </div>
+
+      <div class="ach-row ha6">
+        <div class="ach"><div class="ach-n">30%</div><div class="ach-t">Engagement Boost</div><div class="ach-d">Increased app engagement via intuitive UX</div></div>
+        <div class="ach"><div class="ach-n">95%</div><div class="ach-t">Client Satisfaction</div><div class="ach-d">On freelance projects with clean delivery</div></div>
+        <div class="ach"><div class="ach-n">20%</div><div class="ach-t">Process Efficiency</div><div class="ach-d">Reduced design cycle with better workflows</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero-right">
+      <div class="stat-card"><div class="sc-l">Current Role</div><div class="sc-v">QBS Co</div><div class="sc-s">UI/UX Designer · Jul 2024 – Present</div></div>
+      <div class="stat-card"><div class="sc-l">Experience</div><div class="sc-v">2+ Years</div><div class="sc-s">Web · Mobile · Enterprise SaaS</div></div>
+      <div class="stat-card"><div class="sc-l">Education</div><div class="sc-v">BSc CS</div><div class="sc-s">SZABIST · 2019 – 2023</div></div>
+      <div class="stat-card"><div class="sc-l">Projects Delivered</div><div class="sc-v">6+ Projects</div><div class="sc-s">SaaS · Mobile · AI Platforms</div></div>
+    </div>
+  </div>
+
+  <div class="mq">
+    <div class="mq-t">
+      <span class="mq-i"><span class="mq-dot"></span>UI/UX Design</span><span class="mq-i"><span class="mq-dot"></span>Enterprise SaaS</span><span class="mq-i"><span class="mq-dot"></span>Mobile Applications</span><span class="mq-i"><span class="mq-dot"></span>Design Systems</span><span class="mq-i"><span class="mq-dot"></span>RPA Platforms</span><span class="mq-i"><span class="mq-dot"></span>AI-Powered Products</span><span class="mq-i"><span class="mq-dot"></span>SAP Integration</span><span class="mq-i"><span class="mq-dot"></span>Prototyping</span><span class="mq-i"><span class="mq-dot"></span>eCommerce UX</span><span class="mq-i"><span class="mq-dot"></span>Bilingual SaaS</span>
+      <span class="mq-i"><span class="mq-dot"></span>UI/UX Design</span><span class="mq-i"><span class="mq-dot"></span>Enterprise SaaS</span><span class="mq-i"><span class="mq-dot"></span>Mobile Applications</span><span class="mq-i"><span class="mq-dot"></span>Design Systems</span><span class="mq-i"><span class="mq-dot"></span>RPA Platforms</span><span class="mq-i"><span class="mq-dot"></span>AI-Powered Products</span><span class="mq-i"><span class="mq-dot"></span>SAP Integration</span><span class="mq-i"><span class="mq-dot"></span>Prototyping</span><span class="mq-i"><span class="mq-dot"></span>eCommerce UX</span><span class="mq-i"><span class="mq-dot"></span>Bilingual SaaS</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about-bg">
+  <div class="ov reveal">About Me</div>
+  <div class="about-g">
+    <div>
+      <h2 class="sh reveal">Design that<br>thinks <em>deep.</em></h2>
+      <p class="abt-p reveal">I'm Vinay Kumar — a UI/UX Designer currently at <strong>QBS Co</strong>, with a <strong>BSc in Computer Science from SZABIST</strong>. My CS background gives me a real edge — I understand system constraints, API flows, and component architecture, meaning my designs ship cleanly.</p>
+      <p class="abt-p reveal">I've worked across <strong>enterprise automation platforms, AI-driven industrial tools, eCommerce apps, live streaming products, and bilingual SaaS platforms</strong> — always collaborating closely with engineers to deliver clean, impactful design.</p>
+      <div style="margin-top:2.5rem" class="reveal">
+        <div class="ov" style="margin-bottom:1rem">Experience</div>
+        <div class="exp-list">
+          <div class="exp-row"><div class="exp-date">Jul 2024 — Present</div><div><div class="exp-t">UI/UX Designer</div><div class="exp-co">QBS Co</div></div></div>
+          <div class="exp-row"><div class="exp-date">Nov 2023 — Jun 2024</div><div><div class="exp-t">UI/UX Designer</div><div class="exp-co">Freelance</div><div class="exp-d">Delivered end-to-end design solutions — 95% satisfaction rate.</div></div></div>
+          <div class="exp-row"><div class="exp-date">Sep 2023 — Oct 2023</div><div><div class="exp-t">Creative Designer — Intern</div><div class="exp-co">Jumppace Pvt Ltd</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="info-stack reveal">
+      <div class="ic"><div class="ic-l">Education</div><div class="ic-v">BSc Computer Science</div><div class="ic-s">SZABIST · 2019 – 2023</div></div>
+      <div class="ic"><div class="ic-l">Specialization</div><div class="ic-v">SaaS & Mobile Design</div><div class="ic-s">Enterprise · AI Platforms · eCommerce</div></div>
+      <div class="ic"><div class="ic-l">Location</div><div class="ic-v">Karachi, Pakistan</div><div class="ic-s">Open to remote & relocation</div></div>
+      <div class="ic"><div class="ic-l">Email</div><div class="ic-v" style="font-size:.78rem"><a href="mailto:vinayghai50@gmail.com" style="color:var(--blue)">vinayghai50@gmail.com</a></div></div>
+      <div class="ic"><div class="ic-l">LinkedIn</div><div class="ic-v" style="font-size:.78rem"><a href="https://www.linkedin.com/in/vinay-kumar-2b430323b/" target="_blank" style="color:var(--blue)">vinay-kumar-2b430323b</a></div></div>
+      <div class="ic"><div class="ic-l">Dribbble</div><div class="ic-v" style="font-size:.78rem"><a href="https://dribbble.com/vinigi" target="_blank" style="color:var(--blue)">dribbble.com/vinigi</a></div></div>
+      <div class="ic"><div class="ic-l">Status</div><div class="ic-v">Open to Opportunities</div><div class="ic-s">Full-time · Freelance · Contract</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work" class="work-bg">
+  <div class="ov reveal">Selected Work</div>
+  <h2 class="sh reveal">Featured <em>Case Studies</em></h2>
+  <div class="cs-g reveal">
+    <div class="csc" onclick="show('cs1')">
+      <div class="cs-idx"><span>01 / 02</span><span class="cs-badge">Enterprise SaaS · RPA · Confidential</span></div>
+      <h3 class="cs-title">Enterprise Automation & Intelligence Platform</h3>
+      <p class="cs-desc">Confidential B2B SaaS ecosystem unifying RPA, AI document processing, business intelligence dashboards, and organizational governance — one strategic command center.</p>
+      <div class="cs-chips"><span class="cc">Figma</span><span class="cc">B2B UX</span><span class="cc">Design System</span><span class="cc">RPA</span><span class="cc">SAP Integration</span></div>
+      <button class="cs-go">View Case Study <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="csc" onclick="show('cs2')">
+      <div class="cs-idx"><span>02 / 02</span><span class="cs-badge">AI Platform · Industrial · Web + Mobile</span></div>
+      <h3 class="cs-title">AssetPulse AI — Intelligent Maintenance Platform</h3>
+      <p class="cs-desc">Enterprise-grade AI-powered platform for predictive, preventive, and reactive asset maintenance — centralizing equipment lifecycle, spare parts, and ERP integration for industrial operations.</p>
+      <div class="cs-chips"><span class="cc">Mobile UX</span><span class="cc">Dashboard Design</span><span class="cc">AI Platform</span><span class="cc">SAP/ERP</span><span class="cc">Industrial UX</span></div>
+      <button class="cs-go">View Case Study <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- OTHER PROJECTS -->
+<section class="other-bg" style="padding:5rem 3.5rem">
+  <div class="ov reveal">More Work</div>
+  <h2 class="sh reveal" style="margin-bottom:1.5rem">Other <em>Projects</em></h2>
+  <div class="proj-wrap reveal">
+    <div class="prow"><div class="p-n">03</div><div><div class="p-t">ShopEase — eCommerce Mobile App</div><div class="p-d">End-to-end design of a comprehensive eCommerce app — intuitive UX, product discovery, and streamlined checkout with high-fidelity UI to drive conversions.</div></div><div class="p-badge">Mobile App</div><div class="p-tags"><span class="ptag">eCommerce</span><span class="ptag">iOS</span><span class="ptag">Checkout UX</span></div></div>
+    <div class="prow"><div class="p-n">04</div><div><div class="p-t">Live Streaming App</div><div class="p-d">On-demand streaming platform for movies, sports & entertainment. Focused on intuitive content browsing, smooth playback UX, and responsive design across devices.</div></div><div class="p-badge">Mobile App</div><div class="p-tags"><span class="ptag">Streaming</span><span class="ptag">Mobile</span><span class="ptag">Responsive</span></div></div>
+    <div class="prow"><div class="p-n">05</div><div><div class="p-t">Ajeek — Bilingual SaaS Platform</div><div class="p-d">Comprehensive Service Technology Platform — marketplace for operational tools with data-driven insights, workflow optimization, and bilingual (English/Arabic RTL) support.</div></div><div class="p-badge">SaaS · Web</div><div class="p-tags"><span class="ptag">Bilingual</span><span class="ptag">Arabic/EN</span><span class="ptag">Marketplace</span></div></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="sk-bg">
+  <div class="ov reveal">Expertise</div>
+  <h2 class="sh reveal">Skills & <em>Toolbox</em></h2>
+  <div class="sk-g reveal">
+    <div class="skcell"><div class="sk-n">01</div><div class="sk-t">UI Design</div><div class="sk-d">Figma · Auto Layout · Components · Visual Systems · Responsive Design</div></div>
+    <div class="skcell"><div class="sk-n">02</div><div class="sk-t">UX Research</div><div class="sk-d">User Interviews · Usability Testing · Surveys · Heuristic Evaluation</div></div>
+    <div class="skcell"><div class="sk-n">03</div><div class="sk-t">Prototyping</div><div class="sk-d">Interactive Prototypes · Micro-interactions · Figma Flows · InVision</div></div>
+    <div class="skcell"><div class="sk-n">04</div><div class="sk-t">Design Systems</div><div class="sk-d">Component Libraries · Style Guides · Token Architecture · Storybook</div></div>
+    <div class="skcell"><div class="sk-n">05</div><div class="sk-t">Mobile Design</div><div class="sk-d">iOS · Android · HIG Guidelines · Material Design · React Native</div></div>
+    <div class="skcell"><div class="sk-n">06</div><div class="sk-t">Enterprise SaaS</div><div class="sk-d">Dashboards · Onboarding · B2B UX · Data Visualization · Complex Flows</div></div>
+    <div class="skcell"><div class="sk-n">07</div><div class="sk-t">Dev Handoff</div><div class="sk-d">Figma Dev Mode · Zeplin · HTML/CSS · Engineering Collaboration</div></div>
+    <div class="skcell"><div class="sk-n">08</div><div class="sk-t">Product Thinking</div><div class="sk-d">Wireframing · IA · Journey Mapping · Personas · User Stories</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div id="contact" class="ctc-bg">
+  <div class="ctc-glow"></div><div class="ctc-glow2"></div>
+  <div class="ctc-inner">
+    <div class="ctc-ov reveal">Get In Touch</div>
+    <div class="ctc-h reveal">Let's build<br><em>something great.</em></div>
+    <p class="ctc-sub reveal">Open to full-time roles, freelance projects, and exciting collaborations. If you have something worth building — my inbox is open.</p>
+    <div class="cl-row reveal">
+      <a class="cl email" href="mailto:vinayghai50@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>vinayghai50@gmail.com</a>
+      <a class="cl soc" href="https://www.linkedin.com/in/vinay-kumar-2b430323b/" target="_blank">LinkedIn</a>
+      <a class="cl soc" href="https://dribbble.com/vinigi" target="_blank">Dribbble</a>
+      <a class="cl soc" href="VinayKumar_Resume.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>Resume</a>
+    </div>
+    <div class="ctc-di-row reveal">
+      <div class="ctc-di"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>+92 336 314 9322</div>
+      <div class="ctc-di"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Karachi, Pakistan</div>
+    </div>
+  </div>
+</div>
+<footer><span>© 2025 <b>Vinay Kumar</b> — UI/UX Designer</span><span>Designed with precision & purpose.</span></footer>
+</div>
+
+<!-- ═══════════ CS1: Enterprise Automation Platform ═══════════ -->
+<div id="cs1" class="page csp">
+<div class="csh">
+  <button class="back-b" onclick="show('home')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</button>
+  <div class="csh-ov">01 — Confidential · Enterprise SaaS · B2B Platform</div>
+  <h1 class="csh-h">Enterprise Automation<br>&amp; <em>Intelligence Platform</em></h1>
+  <p class="csh-sub">A confidential B2B SaaS ecosystem designed to unify RPA, AI document processing, business intelligence reporting, and organizational governance — transforming fragmented enterprise operations into one strategic command center.</p>
+  <div class="csh-meta">
+    <div class="cmeta"><div class="cm-l">Role</div><div class="cm-v">UI/UX Designer</div></div>
+    <div class="cmeta"><div class="cm-l">Type</div><div class="cm-v">Enterprise SaaS</div></div>
+    <div class="cmeta"><div class="cm-l">Platform</div><div class="cm-v">Web Application</div></div>
+    <div class="cmeta"><div class="cm-l">Note</div><div class="cm-v">Confidential — Name Anonymized</div></div>
+  </div>
+</div>
+<div class="cs-body">
+<div>
+  <div class="cssec">
+    <div class="css-l">The Problem</div>
+    <h2 class="css-h">Enterprise Operations Challenge</h2>
+    <p class="css-p">Large organizations struggled with <strong>operational inefficiencies from disconnected systems, repetitive manual workflows, and fragmented data governance.</strong> Critical processes like order-to-cash, procurement approvals, and executive reporting were scattered across multiple tools and spreadsheets.</p>
+    <div class="pain-g">
+      <div class="pain-c"><p>Manual order entry from emails into SAP — hours lost daily</p></div>
+      <div class="pain-c"><p>No centralized KPI dashboards for Sales, Finance & Procurement</p></div>
+      <div class="pain-c"><p>Technical barriers blocking business user adoption of automation</p></div>
+      <div class="pain-c"><p>Validation gaps creating compliance and governance risks</p></div>
+      <div class="pain-c"><p>Fragmented client, customer & user data across systems</p></div>
+      <div class="pain-c"><p>Zero visibility into automation performance and error rates</p></div>
+    </div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">Users</div>
+    <h2 class="css-h">4 Core Personas</h2>
+    <div class="mod-stack">
+      <div class="mrow"><div class="midx">01</div><div><div class="mt">Business Analyst</div><div class="md">Monitors KPIs, builds automation scenarios, improves operational efficiency. Needs accessible tools — not IT-grade complexity.</div></div></div>
+      <div class="mrow"><div class="midx">02</div><div><div class="mt">Operations Manager</div><div class="md">Processes customer orders faster, reduces errors, handles validation bottlenecks. Needs OCR + SAP automation without technical overhead.</div></div></div>
+      <div class="mrow"><div class="midx">03</div><div><div class="mt">Enterprise Administrator</div><div class="md">Manages clients, controls permissions, ensures compliance across a multi-client organizational hierarchy.</div></div></div>
+      <div class="mrow"><div class="midx">04</div><div><div class="mt">Executive Leadership</div><div class="md">Needs strategic visibility, boardroom-ready reporting, and cost efficiency insights — not raw data.</div></div></div>
+    </div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">Platform Design</div>
+    <h2 class="css-h">Core Modules</h2>
+    <div class="mod-stack">
+      <div class="mrow"><div class="midx">01</div><div><div class="mt">Reporting & Intelligence Module</div><div class="md">Strategic dashboards for Sales, Finance, Procurement & Inventory — dynamic KPI cards, advanced filters, configurable charts, role-based data visibility.</div></div></div>
+      <div class="mrow"><div class="midx">02</div><div><div class="mt">RPA Scenario Builder</div><div class="md">No-code / low-code automation canvas — progressive node execution, OAuth integrations (Outlook, SAP, Salesforce), OCR + NLP extraction, and AI JSON transformation.</div></div></div>
+      <div class="mrow"><div class="midx">03</div><div><div class="mt">Action Center (Human-in-Loop)</div><div class="md">Failed validations pause automation and trigger human review tasks. Correct and resume — maintaining full audit trail without breaking the flow.</div></div></div>
+      <div class="mrow"><div class="midx">04</div><div><div class="mt">Organization & Client Governance</div><div class="md">Layered hierarchy: Organization → Clients → Customers. Side-modal onboarding, stepper registration, master data, and multi-client context switching.</div></div></div>
+      <div class="mrow"><div class="midx">05</div><div><div class="mt">User Management & Permissions</div><div class="md">Role-based access control, power user setup, admin governance, and security hierarchy across all modules and clients.</div></div></div>
+    </div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">Key UX Decisions</div>
+    <h2 class="css-h">Design Solutions</h2>
+    <p class="css-p"><strong>Progressive Execution Model:</strong> Designed a step-by-step run mode — configure one node, test it, validate success, then expand. Reduces cognitive overload and builds confidence for non-technical business users.</p>
+    <p class="css-p"><strong>Role-Based Information Architecture:</strong> Executives, analysts, and operations teams see only what's contextually relevant — implemented through progressive disclosure and role-specific entry points.</p>
+    <p class="css-p"><strong>Modular Dashboard Design:</strong> Data-dense enterprise dashboards designed with KPI hierarchy, dashboard switching, custom filters, and configurable chart views — strategic clarity without visual clutter.</p>
+    <div class="tag-c"><span class="tg hi">Progressive Execution</span><span class="tg hi">Human-in-Loop Validation</span><span class="tg hi">Role-Based IA</span><span class="tg hi">Multi-Tenant Governance</span><span class="tg">OAuth 2.0</span><span class="tg">OCR + NLP</span><span class="tg">SAP OData API</span></div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">Impact</div>
+    <h2 class="css-h">Business Outcomes</h2>
+    <div class="kpi-g">
+      <div class="kpi-c"><div class="kv">↓</div><div class="kd">Manual Effort Reduced</div></div>
+      <div class="kpi-c"><div class="kv">↑</div><div class="kd">Enterprise Adoption</div></div>
+      <div class="kpi-c"><div class="kv">✓</div><div class="kd">Governance Compliance</div></div>
+    </div>
+    <p class="css-p">This platform demonstrates how thoughtful product design can transform enterprise software from fragmented operations into a <strong>strategic command intelligence ecosystem</strong> where business users automate high-value workflows without losing visibility or control.</p>
+  </div>
+</div>
+<div class="sb">
+  <div class="sb-h">On This Page</div>
+  <div class="sb-items"><button class="sb-btn">Operations Challenge</button><button class="sb-btn">4 Core Personas</button><button class="sb-btn">Core Modules</button><button class="sb-btn">Design Solutions</button><button class="sb-btn">Business Outcomes</button></div>
+  <div class="sb-tools"><div class="sb-h">Tools</div><div class="tps"><span class="tp">Figma</span><span class="tp">FigJam</span><span class="tp">Zeplin</span><span class="tp">Miro</span></div></div>
+</div>
+</div>
+<div class="cs-nxt"><div><div class="cn-l">Next Case Study</div><div class="cn-t">AssetPulse AI</div></div><button class="cn-b" onclick="show('cs2')">View Project <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+</div>
+
+<!-- ═══════════ CS2: AssetPulse AI ═══════════ -->
+<div id="cs2" class="page csp">
+<div class="csh">
+  <button class="back-b" onclick="show('home')"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</button>
+  <div class="csh-ov">02 — AI Platform · Industrial SaaS · Web + Mobile</div>
+  <h1 class="csh-h">AssetPulse <em>AI</em></h1>
+  <p class="csh-sub">Enterprise-grade AI-powered web & mobile platform for predictive, preventive, and reactive asset maintenance — centralizing equipment lifecycle, spare parts inventory, and SAP/ERP integration for industrial operations at scale.</p>
+  <div class="csh-meta">
+    <div class="cmeta"><div class="cm-l">Role</div><div class="cm-v">UI/UX Designer</div></div>
+    <div class="cmeta"><div class="cm-l">Platforms</div><div class="cm-v">Web + Mobile</div></div>
+    <div class="cmeta"><div class="cm-l">Industry</div><div class="cm-v">Manufacturing · Logistics · Energy</div></div>
+    <div class="cmeta"><div class="cm-l">Focus</div><div class="cm-v">Dashboard UX · Mobile Workflows · Industrial Design</div></div>
+  </div>
+</div>
+<div class="cs-body">
+<div>
+  <div class="cssec">
+    <div class="css-l">The Problem</div>
+    <h2 class="css-h">Industrial Maintenance Challenge</h2>
+    <p class="css-p">Industrial maintenance teams relied on <strong>disconnected spreadsheets, manual logs, and purely reactive servicing.</strong> Equipment failures surprised teams, spare parts were unavailable, and siloed ERP systems created costly delays and data errors across operations.</p>
+    <div class="pain-g">
+      <div class="pain-c"><p>Unplanned equipment downtime with no advance warning</p></div>
+      <div class="pain-c"><p>Fragmented asset records with no central registry</p></div>
+      <div class="pain-c"><p>Inventory shortages delaying critical repairs</p></div>
+      <div class="pain-c"><p>Manual SAP/ERP entry causing delays and errors</p></div>
+      <div class="pain-c"><p>No failure prediction before actual equipment breakdown</p></div>
+      <div class="pain-c"><p>High costs from inefficient maintenance scheduling</p></div>
+    </div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">My Role</div>
+    <h2 class="css-h">Design Scope</h2>
+    <p class="css-p">Led the end-to-end product experience across both web and mobile platforms — from research and information architecture through high-fidelity design and design system delivery.</p>
+    <div class="tag-c"><span class="tg hi">Product Research</span><span class="tg hi">Competitor Benchmarking</span><span class="tg hi">Journey Mapping</span><span class="tg hi">Information Architecture</span><span class="tg hi">Dashboard UX Strategy</span><span class="tg hi">Mobile-First Workflows</span><span class="tg hi">High-Fidelity UI</span><span class="tg hi">Design System</span><span class="tg hi">SAP Integration UX</span></div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">Platform Design</div>
+    <h2 class="css-h">Core Modules</h2>
+    <div class="mod-stack">
+      <div class="mrow"><div class="midx">01</div><div><div class="mt">Centralized Equipment Registry</div><div class="md">Unified asset database — Equipment ID, installation history, maintenance records, warranty lifecycle, and ERP-linked data in one searchable interface.</div></div></div>
+      <div class="mrow"><div class="midx">02</div><div><div class="mt">Reactive Maintenance Module</div><div class="md">Immediate issue logging and work order assignment. Designed for speed — minimum taps for urgent breakdown response, even in field conditions with gloves on.</div></div></div>
+      <div class="mrow"><div class="midx">03</div><div><div class="mt">Preventive Maintenance Scheduling</div><div class="md">Automated recurring schedules based on time intervals, usage thresholds, machine runtime, and compliance requirements. Reduced missed servicing significantly.</div></div></div>
+      <div class="mrow"><div class="midx">04</div><div><div class="mt">Predictive Maintenance (AI-Driven)</div><div class="md">Historical data analysis forecasts failures — performance anomaly detection, downtime risk scoring, and maintenance recommendations before breakdowns occur.</div></div></div>
+      <div class="mrow"><div class="midx">05</div><div><div class="mt">Spare Parts Inventory Management</div><div class="md">Visual stock thresholds, auto reorder triggers, vendor linkage, and stockout prevention — making critical inventory states impossible to miss at a glance.</div></div></div>
+      <div class="mrow"><div class="midx">06</div><div><div class="mt">SAP & ERP Integration</div><div class="md">Seamless sync of equipment master data, purchase orders, inventory updates, and maintenance logs. Eliminated all manual data entry requirements.</div></div></div>
+    </div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">Design Approach</div>
+    <h2 class="css-h">Web & Mobile Strategy</h2>
+    <p class="css-p"><strong>Web Platform — Built for Managers:</strong> Focused on maintenance dashboards, asset tracking, inventory controls, predictive analytics, and KPI visibility. Information hierarchy was rigorously enforced — most critical data always surfaces first.</p>
+    <p class="css-p"><strong>Mobile Platform — Built for Technicians:</strong> Optimized for field conditions — one-tap task updates, simplified forms, QR/barcode asset identification, real-time updates, push notifications, and offline-friendly usability for low-connectivity environments.</p>
+    <div class="tag-c"><span class="tg hi">Layered Dashboards</span><span class="tg hi">One-Tap Mobile Flows</span><span class="tg hi">QR Asset Lookup</span><span class="tg hi">Predictive Alert UI</span><span class="tg hi">Offline-Friendly UX</span><span class="tg">Push Notifications</span><span class="tg">Inventory Heatmaps</span><span class="tg">AI Risk Scoring</span></div>
+  </div>
+  <div class="cssec">
+    <div class="css-l">Outcome</div>
+    <h2 class="css-h">Business Impact</h2>
+    <div class="kpi-g">
+      <div class="kpi-c"><div class="kv">↓</div><div class="kd">Unplanned Downtime</div></div>
+      <div class="kpi-c"><div class="kv">↑</div><div class="kd">Maintenance Adherence</div></div>
+      <div class="kpi-c"><div class="kv">0×</div><div class="kd">Manual ERP Entry Required</div></div>
+    </div>
+    <p class="css-p">AssetPulse AI transformed traditional maintenance processes into a <strong>scalable, AI-powered ecosystem</strong> — combining predictive intelligence, inventory optimization, and enterprise automation to help organizations shift from reactive maintenance to smarter, proactive asset management.</p>
+  </div>
+</div>
+<div class="sb">
+  <div class="sb-h">On This Page</div>
+  <div class="sb-items"><button class="sb-btn">The Problem</button><button class="sb-btn">Design Scope</button><button class="sb-btn">Core Modules</button><button class="sb-btn">Web & Mobile Strategy</button><button class="sb-btn">Business Impact</button></div>
+  <div class="sb-tools"><div class="sb-h">Tools</div><div class="tps"><span class="tp">Figma</span><span class="tp">FigJam</span><span class="tp">Maze</span><span class="tp">Zeplin</span></div></div>
+</div>
+</div>
+<div class="cs-nxt"><div><div class="cn-l">Previous Case Study</div><div class="cn-t">Enterprise Automation Platform</div></div><button class="cn-b" onclick="show('cs1')">View Project <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+</div>
+
+<script>
+/* LOADER */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.getElementById('loader').classList.add('gone')},1400);
+});
+
+/* CURSOR */
+const C=document.getElementById('cur'),L=document.getElementById('curl');
+let mx=0,my=0,lx=0,ly=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  C.style.left=mx+'px';C.style.top=my+'px';
+});
+(function tick(){
+  lx+=(mx-lx)*.11;ly+=(my-ly)*.11;
+  L.style.left=lx+'px';L.style.top=ly+'px';
+  requestAnimationFrame(tick);
+})();
+const hoverEls=document.querySelectorAll('button,a,.csc,.prow,.skcell,.ic,.exp-row,.ach,.stat-card,.mrow,.kpi-c');
+hoverEls.forEach(el=>{
+  el.addEventListener('mouseenter',()=>{C.style.width='14px';C.style.height='14px';L.style.width='52px';L.style.height='52px';L.style.opacity='.7';L.style.borderColor='rgba(99,102,241,.6)'});
+  el.addEventListener('mouseleave',()=>{C.style.width='8px';C.style.height='8px';L.style.width='34px';L.style.height='34px';L.style.opacity='.5';L.style.borderColor='rgba(59,130,246,.4)'});
+});
+
+/* 3D TILT */
+function addTilt(sel,strength){
+  document.querySelectorAll(sel).forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      el.style.transform=`perspective(800px) rotateX(${-y*strength}deg) rotateY(${x*strength}deg) translateZ(8px)`;
+    });
+    el.addEventListener('mouseleave',()=>{el.style.transform='perspective(800px) rotateX(0) rotateY(0) translateZ(0)'});
+  });
+}
+addTilt('.ach',10);
+addTilt('.stat-card',6);
+addTilt('.csc',4);
+addTilt('.kpi-c',8);
+
+/* SCROLL REVEAL */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+/* ROUTER */
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById(id);
+  pg.classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  // re-observe reveals on new page
+  pg.querySelectorAll('.reveal').forEach(el=>{el.classList.remove('visible');observer.observe(el)});
+}
+function goH(sec){
+  show('home');
+  if(sec)setTimeout(()=>{const el=document.getElementById(sec);if(el)el.scrollIntoView({behavior:'smooth'})},60);
+}
+
+/* COUNTER ANIMATION on ach cards */
+function animateCounters(){
+  document.querySelectorAll('.ach-n').forEach(el=>{
+    const text=el.textContent;
+    const num=parseFloat(text);
+    if(isNaN(num))return;
+    const suffix=text.replace(String(num),'');
+    let start=0;const dur=1200;const step=16;
+    const inc=num/(dur/step);
+    const timer=setInterval(()=>{
+      start=Math.min(start+inc,num);
+      el.textContent=Number.isInteger(num)?Math.floor(start)+suffix:(start.toFixed(0))+suffix;
+      if(start>=num)clearInterval(timer);
+    },step);
+  });
+}
+// trigger once hero loads
+setTimeout(animateCounters,1600);
+</script>
+</body>
+</html>
