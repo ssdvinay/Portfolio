@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#F7F9FC">
+<meta name="theme-color" content="#F7F9FC" id="theme-color-meta">
 <title>Vinay Kumar — Product Designer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -872,6 +872,157 @@ img,svg{max-width:100%}
   .outcome-tag{font-size:.58rem !important;}
 }
 
+
+/* =====================================================================
+   DARK MODE
+   ===================================================================== */
+.theme-toggle{
+  width:42px;
+  height:38px;
+  margin-left:1rem;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  position:relative;
+  flex:0 0 auto;
+  border:1px solid var(--ln);
+  border-radius:11px;
+  background:#FFFFFF;
+  color:#5F6E82;
+  box-shadow:0 6px 16px rgba(38,61,98,.06);
+  transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.theme-toggle:hover{transform:translateY(-1px);color:var(--ac);border-color:rgba(41,96,236,.28);box-shadow:0 9px 20px rgba(41,96,236,.12)}
+.theme-toggle:focus-visible{outline:3px solid rgba(41,96,236,.28);outline-offset:3px}
+.theme-toggle__sun,.theme-toggle__moon{position:absolute;display:grid;place-items:center;font-family:'Poppins',sans-serif;font-size:1rem;line-height:1;transition:opacity .18s ease,transform .22s ease}
+.theme-toggle__sun{opacity:1;transform:scale(1) rotate(0deg)}
+.theme-toggle__moon{opacity:0;transform:scale(.6) rotate(-25deg)}
+html[data-theme="dark"] .theme-toggle{background:#182439;border-color:#30425E;color:#DCE7F6;box-shadow:none}
+html[data-theme="dark"] .theme-toggle:hover{color:#9DB8FF;border-color:#5879B0;background:#1D2B43}
+html[data-theme="dark"] .theme-toggle__sun{opacity:0;transform:scale(.6) rotate(25deg)}
+html[data-theme="dark"] .theme-toggle__moon{opacity:1;transform:scale(1) rotate(0deg)}
+
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0B1321;
+  --bg2:#111C2E;
+  --card:#142137;
+  --ink:#F3F7FC;
+  --mid:#B4C1D2;
+  --dim:#8392A7;
+  --ln:#263750;
+  --ln2:#344A68;
+  --ac:#86A8FF;
+  --acd:rgba(134,168,255,.14);
+  --acl:rgba(134,168,255,.34);
+  --green:#41C393;
+  background:var(--bg);
+}
+html[data-theme="dark"] body{
+  background:
+    radial-gradient(circle at 92% -8%,rgba(72,113,215,.23),transparent 30rem),
+    radial-gradient(circle at -8% 32%,rgba(38,155,124,.13),transparent 25rem),
+    var(--bg);
+  color:var(--ink);
+}
+html[data-theme="dark"] nav{background:rgba(10,18,31,.86);border-bottom-color:rgba(48,68,98,.84);box-shadow:0 7px 30px rgba(0,0,0,.20)}
+html[data-theme="dark"] .nlinks a{color:#AEBCCE}
+html[data-theme="dark"] .nlinks a:hover{color:var(--ink)}
+html[data-theme="dark"] .nhire{background:#142138;box-shadow:none}
+html[data-theme="dark"] .sw.alt{background:linear-gradient(180deg,rgba(17,28,46,.92),rgba(11,19,33,.96))}
+html[data-theme="dark"] #hero{background:linear-gradient(135deg,rgba(15,25,43,.98),rgba(12,20,34,.92)),var(--bg)}
+html[data-theme="dark"] #hero::before{background-image:linear-gradient(rgba(134,168,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(134,168,255,.07) 1px,transparent 1px)}
+html[data-theme="dark"] .hero-name-summary .hero-simple-title,
+html[data-theme="dark"] .htitle,
+html[data-theme="dark"] .cs-title{color:var(--ink)}
+html[data-theme="dark"] .hero-name-summary .hero-profile-summary,
+html[data-theme="dark"] .hdesc,
+html[data-theme="dark"] .ssub,
+html[data-theme="dark"] .about-left p,
+html[data-theme="dark"] .cs-sub,
+html[data-theme="dark"] .cs-p{color:var(--mid)}
+html[data-theme="dark"] .mq{background:rgba(13,22,37,.82)}
+html[data-theme="dark"] .mqi{color:#AAB8C9}
+html[data-theme="dark"] .about-left,
+html[data-theme="dark"] .info-group,
+html[data-theme="dark"] .cs-row,
+html[data-theme="dark"] .prow,
+html[data-theme="dark"] .skc,
+html[data-theme="dark"] .ct-links,
+html[data-theme="dark"] footer,
+html[data-theme="dark"] .cs-sec,
+html[data-theme="dark"] .cs-sidebar,
+html[data-theme="dark"] .cs-nxt,
+html[data-theme="dark"] .browser-frame,
+html[data-theme="dark"] .phone-frame,
+html[data-theme="dark"] .phone-inner,
+html[data-theme="dark"] .tg,
+html[data-theme="dark"] .outcome-tag{
+  background:#142137;
+  border-color:var(--ln);
+  box-shadow:none;
+}
+html[data-theme="dark"] .exp-list,
+html[data-theme="dark"] .pc,
+html[data-theme="dark"] .mrow,
+html[data-theme="dark"] .kpic,
+html[data-theme="dark"] .outcome-section .kpic{
+  background:#111D31;
+  border-color:var(--ln);
+  box-shadow:none;
+}
+html[data-theme="dark"] .cs-row:hover,
+html[data-theme="dark"] .skc:hover,
+html[data-theme="dark"] .prow:hover,
+html[data-theme="dark"] .pc:hover,
+html[data-theme="dark"] .mrow:hover,
+html[data-theme="dark"] .kpic:hover,
+html[data-theme="dark"] .outcome-section .kpic:hover{background:#192844;box-shadow:none}
+html[data-theme="dark"] .btn-gh,
+html[data-theme="dark"] .backb{background:#142137;color:#C2CEDD;border-color:var(--ln);box-shadow:none}
+html[data-theme="dark"] .btn-gh:hover,
+html[data-theme="dark"] .backb:hover{background:#1A2943;color:var(--ac);border-color:#48658F}
+html[data-theme="dark"] .ctw{background:linear-gradient(135deg,#0F1A2D 0%,#101B2D 48%,#10231F 100%)}
+html[data-theme="dark"] .csp{background:linear-gradient(180deg,#0B1321 0%,#0B1321 72%,#101C2F 100%)}
+html[data-theme="dark"] .csh{background:radial-gradient(circle at 88% 8%,rgba(83,123,226,.22),transparent 29rem),radial-gradient(circle at 0% 80%,rgba(54,177,145,.13),transparent 24rem),linear-gradient(135deg,#101B2D 0%,#0C1626 100%)}
+html[data-theme="dark"] .cm-item{background:rgba(20,33,55,.86);border-color:#2B3D58;box-shadow:none}
+html[data-theme="dark"] .sb-btn:hover{background:#1C2B47}
+html[data-theme="dark"] .cs-plat span,
+html[data-theme="dark"] .tg.hi,
+html[data-theme="dark"] .outcome-tag--primary{background:#1B2D4D;border-color:#35598D;color:#9DB8FF}
+html[data-theme="dark"] .shot-wrap{background:linear-gradient(135deg,#111D31,#15243C);border-color:var(--ln);box-shadow:none}
+html[data-theme="dark"] .browser-bar{background:#19263B;border-bottom-color:#2B3B55}
+html[data-theme="dark"] .phone-wrap{background:linear-gradient(145deg,#162541,#111D31);border-color:#2B3D58;box-shadow:none}
+html[data-theme="dark"] .phone-frame{border-color:#30425E}
+html[data-theme="dark"] .phone-inner{border-color:#2B3B55}
+html[data-theme="dark"] .cn-btn{background:#1B2D4D;border-color:#35598D;color:#9DB8FF}
+html[data-theme="dark"] .cn-btn:hover{background:#22385E}
+html[data-theme="dark"] .outcome-section{background:linear-gradient(135deg,#142137 0%,#101C2F 100%);border-color:#2B3D58}
+html[data-theme="dark"] .outcome-tag{color:#B3C0D0}
+html[data-theme="dark"] .outcome-section .kd{color:#AEBCCE}
+html[data-theme="dark"] .shot-cap,
+html[data-theme="dark"] .prd,
+html[data-theme="dark"] .sk-d,
+html[data-theme="dark"] .ct-left p,
+html[data-theme="dark"] .ct-link,
+html[data-theme="dark"] .cs-blist li,
+html[data-theme="dark"] .pc,
+html[data-theme="dark"] .md,
+html[data-theme="dark"] .kd,
+html[data-theme="dark"] .ig-list li,
+html[data-theme="dark"] .exp-note{color:var(--mid)}
+html[data-theme="dark"] .cs-p strong,
+html[data-theme="dark"] .about-left p strong,
+html[data-theme="dark"] .ig-list li strong,
+html[data-theme="dark"] .cm-v,
+html[data-theme="dark"] .mt,
+html[data-theme="dark"] .sk-t,
+html[data-theme="dark"] .prt,
+html[data-theme="dark"] .cs-body h3{color:var(--ink)}
+html[data-theme="dark"] .htitle .stroke{background:linear-gradient(90deg,#8FACFF 0%,#7296FF 55%,#B1C5FF 100%);-webkit-background-clip:text;background-clip:text}
+@media(max-width:860px){.theme-toggle{margin-left:auto;width:40px;height:36px}}
+
 </style>
 </head>
 <body>
@@ -887,6 +1038,10 @@ img,svg{max-width:100%}
     <li><a href="#" onclick="goH('skills');return false">Skills</a></li>
     <li><a href="#" onclick="goH('contact');return false" class="nhire">Contact</a></li>
   </ul>
+  <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Enable dark mode" aria-pressed="false">
+    <span class="theme-toggle__sun" aria-hidden="true">☀</span>
+    <span class="theme-toggle__moon" aria-hidden="true">☾</span>
+  </button>
 </nav>
 
 <!-- ═══════════ HOME ═══════════ -->
@@ -1421,6 +1576,25 @@ function goH(sec){
   if(sec)setTimeout(()=>{const el=document.getElementById(sec);if(el)el.scrollIntoView({behavior:'smooth'})},55);
 }
 function jump(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+
+/* THEME TOGGLE */
+const themeToggle=document.getElementById('theme-toggle');
+const themeMeta=document.getElementById('theme-color-meta');
+const themeStorageKey='vinay-portfolio-theme';
+function applyTheme(theme){
+  const isDark=theme==='dark';
+  document.documentElement.dataset.theme=isDark?'dark':'light';
+  themeToggle.setAttribute('aria-pressed',String(isDark));
+  themeToggle.setAttribute('aria-label',isDark?'Enable light mode':'Enable dark mode');
+  if(themeMeta)themeMeta.setAttribute('content',isDark?'#0B1321':'#F7F9FC');
+}
+const savedTheme=localStorage.getItem(themeStorageKey);
+applyTheme(savedTheme==='dark'?'dark':'light');
+themeToggle.addEventListener('click',()=>{
+  const nextTheme=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  applyTheme(nextTheme);
+  localStorage.setItem(themeStorageKey,nextTheme);
+});
 </script>
 </body>
 </html>
